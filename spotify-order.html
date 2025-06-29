@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spotify Order - FlexDeal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-green-100 to-white min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white shadow-lg rounded-xl max-w-md w-full p-6">
+    <h1 class="text-2xl font-bold text-green-600 mb-4 text-center">🎵 Order Spotify Premium</h1>
+    <form id="orderForm" class="space-y-4">
+      <input type="hidden" name="app" value="Spotify" />
+      <input type="hidden" name="phone" value="9999999999" />
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Reseller Email</label>
+        <input type="email" name="reseller" required class="mt-1 block w-full border border-gray-300 rounded p-2" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Customer Name</label>
+        <input type="text" name="name" required class="mt-1 block w-full border border-gray-300 rounded p-2" />
+      </div>
+
+      <button type="submit" class="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700 transition">
+        Pay & Get Invite
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = {};
+      formData.forEach((val, key) => data[key] = val);
+      localStorage.setItem("lastOrder", JSON.stringify(data));
+      window.location.href = "https://payments.cashfree.com/forms/flexdeal";
+    });
+  </script>
+</body>
+</html>
