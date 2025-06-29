@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reseller Login - FlexDeal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-pink-100 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+    <h2 class="text-2xl font-bold text-center text-indigo-600 mb-6">FlexDeal Reseller Login</h2>
+
+    <div id="message" class="mb-4 text-center text-sm text-red-500 hidden"></div>
+
+    <input type="email" id="email" placeholder="Email" class="w-full mb-3 px-4 py-2 border rounded" />
+    <input type="password" id="password" placeholder="Password" class="w-full mb-4 px-4 py-2 border rounded" />
+
+    <button onclick="login()" class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">Login</button>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyCqBBdX8BidZsKd17M7puy7pDxfk744nfE10mN1W75FAaH53ykBvwK4vbQdsUDjhS8rA/exec";
+
+    function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const msgBox = document.getElementById("message");
+
+      if (!email || !password) {
+        msgBox.innerText = "Please enter both email and password.";
+        msgBox.classList.remove("hidden");
+        return;
+      }
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: new URLSearchParams({ email, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("reseller", email);
+          window.location.href = "dashboard.html";
+        } else {
+          msgBox.innerText = data.message || "Login failed";
+          msgBox.classList.remove("hidden");
+        }
+      })
+      .catch(() => {
+        msgBox.innerText = "Network error. Please try again.";
+        msgBox.classList.remove("hidden");
+      });
+    }
+  </script>
+
+</body>
+</html>
