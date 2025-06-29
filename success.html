@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Success - FlexDeal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>.hidden { display: none; }</style>
+</head>
+<body class="bg-green-50 flex justify-center items-center min-h-screen p-4">
+  <div class="bg-white rounded-xl shadow-xl p-6 max-w-md w-full text-center">
+    <h1 class="text-2xl font-bold text-green-600 mb-2">✅ Success</h1>
+    <p class="mb-4 text-gray-600">Here are your credentials:</p>
+
+    <div id="credentials" class="hidden space-y-2">
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Password:</strong> <span id="password"></span></p>
+      <p><strong>Invite Link:</strong><br><a id="invite" href="#" target="_blank" class="text-blue-600 underline break-words"></a></p>
+    </div>
+
+    <div id="error" class="hidden text-red-600 mt-4">❌ No account available or something went wrong.</div>
+  </div>
+
+  <script>
+    async function fetchAccount() {
+      const order = JSON.parse(localStorage.getItem("lastOrder"));
+      if (!order) {
+        document.getElementById("error").classList.remove("hidden");
+        return;
+      }
+
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbxNOXY1AullWhsM1M395OugdXdbNGWqUJ-WBBTDtfnCM2ZwE_hRHJvdD44x67-XSfboYA/exec", {
+          method: "POST",
+          body: new URLSearchParams(order)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          document.getElementById("credentials").classList.remove("hidden");
+          if (data.email) document.getElementById("email").textContent = data.email;
+          if (data.password) document.getElementById("password").textContent = data.password;
+          if (data.invite) {
+            document.getElementById("invite").textContent = data.invite;
+            document.getElementById("invite").href = data.invite;
+          }
+          localStorage.removeItem("lastOrder");
+        } else {
+          document.getElementById("error").classList.remove("hidden");
+        }
+      } catch {
+        document.getElementById("error").classList.remove("hidden");
+      }
+    }
+
+    fetchAccount();
+  </script>
+</body>
+</html>
