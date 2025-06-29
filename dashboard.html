@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlexDeal Reseller Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const reseller = localStorage.getItem("reseller");
+      if (!reseller) window.location.href = "index.html";
+      document.getElementById("reseller-name").innerText = reseller;
+    });
+
+    function logout() {
+      localStorage.removeItem("reseller");
+      window.location.href = "index.html";
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 via-white to-pink-100 min-h-screen font-sans">
+
+  <!-- Navigation Bar -->
+  <header class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
+    <h1 class="text-xl font-bold text-indigo-600">🎯 FlexDeal Reseller Portal</h1>
+    <div class="flex items-center space-x-4 text-sm">
+      <span class="text-gray-700">Hi, <strong id="reseller-name" class="text-indigo-800"></strong></span>
+      <a href="https://wa.me/918764023747" target="_blank" class="text-green-600 font-semibold hover:underline">Support</a>
+      <button onclick="logout()" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto p-6">
+
+    <!-- Welcome Box -->
+    <section class="bg-white shadow rounded-xl p-6 mb-6 text-center">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-1">Welcome Reseller 👋</h2>
+      <p class="text-gray-500">Manage your subscriptions and place orders easily</p>
+    </section>
+
+    <!-- App Cards -->
+    <section>
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">📦 Available Subscriptions</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+        <!-- YouTube -->
+        <a href="youtube-order.html"
+           class="bg-white hover:shadow-xl transition rounded-xl p-6 text-center shadow-md flex flex-col items-center">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" class="h-16 mb-4" alt="YouTube">
+          <h3 class="text-lg font-bold text-red-600 mb-1">YouTube Premium Gmail</h3>
+          <p class="text-sm text-gray-500 mb-2">Lifetime Access</p>
+          <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">₹15</span>
+        </a>
+
+        <!-- Spotify -->
+        <a href="spotify-order.html"
+           class="bg-white hover:shadow-xl transition rounded-xl p-6 text-center shadow-md flex flex-col items-center">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" class="h-16 mb-4" alt="Spotify">
+          <h3 class="text-lg font-bold text-green-600 mb-1">Spotify Premium</h3>
+          <p class="text-sm text-gray-500 mb-2">2 Months Access</p>
+          <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">₹54</span>
+        </a>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/918764023747" target="_blank"
+     class="fixed bottom-5 right-5 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg text-xl"
+     title="Need help? Chat on WhatsApp">
+    💬
+  </a>
+
+</body>
+</html>
