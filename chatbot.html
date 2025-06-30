@@ -94,13 +94,16 @@
 
       if (t.includes("hi") || t.includes("hello")) reply = "Hi reseller 👋 How can I assist you today?";
       else if (t.includes("how to order")) reply = "Go to Dashboard → Choose App → Pay & Get Access.";
+       else if (t.includes("how to get you tube premium")) reply = "Go to Dashboard → you tube → Pay & Get Access.";
       else if (t.includes("payment fail")) reply = "plz send your number and Try again or contact us on WhatsApp.";
+      else if (t.includes("payment ")) reply = "after selecting app you can pay using your upi or other payment method to our website.";
       else if (t.includes("how are you")) reply = "Thank you for asking! I am fine. What about you?";
       else if (t.includes("prime video")) reply = "You can order from our website. We offer 1 month and 6 month plans. If you want more information, please contact us.";
       else if (t.includes("price")) reply = "YouTube ₹15 | Spotify ₹54 | Prime ₹79";
       else if (t.includes("support")) reply = "Chat: https://wa.me/918764023747";
       else if (t.includes("refund")) reply = `Please send payment screenshot to support. Ticket ID: ${generateTicket()}`;
       else if (t.includes("delivery") || t.includes("delay")) reply = "Accounts are delivered instantly after payment.";
+      else if (t.includes("when is will get my subscription") || t.includes("delay")) reply = "Accounts are delivered instantly after payment.";
       else if (t.includes("invite link")) reply = "Invite link is shown on the success page after payment.";
       else if (t.includes("reseller id")) reply = "You're logged in as: " + resellerEmail;
       else if (t.includes("note") || t.includes("remind")) {
