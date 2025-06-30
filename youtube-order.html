@@ -55,17 +55,20 @@
         return;
       }
 
-      // Save to localStorage
-      localStorage.setItem("app", "YouTube");
-      localStorage.setItem("phone", "9999999999");
-      localStorage.setItem("reseller", reseller);
-      localStorage.setItem("name", name);
+      const order = {
+        app: "YouTube",
+        phone: "9999999999",
+        reseller: reseller,
+        name: name
+      };
 
-      // Redirect to your payment gateway
-      window.location.href = "https://payments.cashfree.com/forms/youtube23"; // Replace with actual payment link
+      // ✅ Save as one object
+      localStorage.setItem("lastOrder", JSON.stringify(order));
+
+      // ✅ Redirect to Cashfree payment page (edit this link to your real one)
+      window.location.href = "https://payments.cashfree.com/forms/youtube23";
     });
   </script>
 
 </body>
 </html>
-
