@@ -3,52 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YouTube Order Success - FlexDeal</title>
+  <title>Order Success - FlexDeal</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>.hidden { display: none; }</style>
+  <style>
+    body {
+      background: #121212;
+      font-family: 'Helvetica Neue', sans-serif;
+      color: #ffffff;
+    }
+    .card {
+      background-color: #181818;
+    }
+    .copy-btn {
+      font-size: 0.8rem;
+      color: #1DB954;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-white to-red-100 min-h-screen flex justify-center items-center p-6 font-sans">
-  <div class="bg-white shadow-xl rounded-xl max-w-md w-full p-6 text-center">
-    <h1 class="text-2xl font-bold text-red-600 mb-2">✅ YouTube Order Successful</h1>
-    <p class="text-gray-600 mb-4">Here are your details. Please save them securely.</p>
+<body class="min-h-screen flex justify-center items-center p-6">
 
-    <div id="credentials" class="space-y-4 hidden">
-      <div class="text-left">
-        <p><strong>Customer Name:</strong> <span id="custname" class="text-gray-800"></span></p>
-        <p><strong>App:</strong> <span id="appname" class="text-gray-800"></span></p>
+  <div class="card shadow-xl rounded-2xl max-w-md w-full p-6 text-center space-y-4">
+    <h1 class="text-2xl font-bold text-green-400">✅ YouTube Order Successful</h1>
+    <p class="text-gray-400">Here are your credentials. Please save them securely.</p>
+
+    <div id="credentials" class="space-y-4 hidden text-left">
+      <p><strong>Customer Name:</strong> <span id="custname"></span></p>
+      <p><strong>App:</strong> <span id="appname"></span></p>
+
+      <div class="bg-gray-800 p-4 rounded-md space-y-2">
+        <p><strong>Email:</strong> <span id="email"></span>
+          <span class="copy-btn" onclick="copy('email')">Copy</span>
+        </p>
+        <p><strong>Password:</strong> <span id="password"></span>
+          <span class="copy-btn" onclick="copy('password')">Copy</span>
+        </p>
+        <p><strong>Invite Link:</strong><br>
+          <a id="invite" href="#" target="_blank" class="text-green-400 underline break-all"></a>
+          <span class="copy-btn" onclick="copy('invite')">Copy</span>
+        </p>
       </div>
 
-      <div class="bg-gray-50 p-4 rounded shadow text-left space-y-2">
-        <div>
-          <p><strong>Email:</strong> <span id="email" class="text-gray-800"></span>
-            <button onclick="copy('email')" class="text-sm text-blue-500 ml-2">Copy</button>
-          </p>
-        </div>
-        <div>
-          <p><strong>Password:</strong> <span id="password" class="text-gray-800"></span>
-            <button onclick="copy('password')" class="text-sm text-blue-500 ml-2">Copy</button>
-          </p>
-        </div>
-        <div>
-          <p><strong>Invite Link:</strong><br>
-            <a id="invite" href="#" target="_blank" class="text-blue-600 underline break-all"></a>
-            <button onclick="copy('invite')" class="text-sm text-blue-500 ml-2">Copy</button>
-          </p>
-        </div>
-      </div>
-
-      <a href="dashboard.html" class="block bg-red-600 text-white mt-4 px-4 py-2 rounded hover:bg-red-700">⬅ Back to Dashboard</a>
-      <a href="https://wa.me/918764023747" target="_blank" class="block text-sm text-red-600 mt-2 hover:underline">Need help? Chat on WhatsApp</a>
+      <a href="dashboard.html" class="block mt-4 bg-green-500 text-white text-center py-2 rounded hover:bg-green-600">⬅ Back to Dashboard</a>
+      <a href="https://wa.me/918764023747" target="_blank" class="block text-sm text-green-400 mt-2 hover:underline text-center">Need help? Chat on WhatsApp</a>
     </div>
 
-    <div id="error" class="text-red-600 font-semibold hidden mt-4">❌ No account available or invalid request.</div>
+    <div id="error" class="text-red-400 font-semibold hidden">❌ No account available or invalid request.</div>
   </div>
 
   <script>
     function copy(field) {
       const text = document.getElementById(field).textContent;
       navigator.clipboard.writeText(text).then(() => {
-        alert(`${field} copied!`);
+        alert(field + ' copied!');
       });
     }
 
@@ -64,12 +72,13 @@
           method: "POST",
           body: new URLSearchParams(order)
         });
+
         const data = await res.json();
 
         if (data.success) {
           document.getElementById("credentials").classList.remove("hidden");
-          document.getElementById("custname").textContent = order.name || "Unknown";
-          document.getElementById("appname").textContent = order.app || "N/A";
+          document.getElementById("custname").textContent = order.name;
+          document.getElementById("appname").textContent = order.app;
           document.getElementById("email").textContent = data.email || "-";
           document.getElementById("password").textContent = data.password || "-";
           document.getElementById("invite").textContent = data.invite || "-";
@@ -85,5 +94,6 @@
 
     fetchAccount();
   </script>
+
 </body>
 </html>
