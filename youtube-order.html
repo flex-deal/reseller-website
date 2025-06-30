@@ -3,75 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>YouTube Order - FlexDeal</title>
+  <title>YouTube Premium Order - FlexDeal</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    .hidden { display: none; }
+    body {
+      background: #121212;
+      font-family: 'Helvetica Neue', sans-serif;
+      color: #ffffff;
+    }
+    .spotify-green {
+      background-color: #1DB954;
+    }
+    .spotify-green:hover {
+      background-color: #1ed760;
+    }
+    .card {
+      background-color: #181818;
+    }
   </style>
 </head>
-<body class="bg-gradient-to-br from-white to-blue-100 min-h-screen flex flex-col justify-center items-center p-6 font-sans">
+<body class="min-h-screen flex flex-col justify-center items-center p-6">
 
-  <div class="bg-white shadow-xl rounded-xl max-w-md w-full p-6 space-y-4">
-    <h1 class="text-2xl font-bold text-red-600 text-center">🎬 YouTube Premium Order</h1>
+  <div class="card shadow-xl rounded-2xl max-w-md w-full p-6 space-y-6">
+    <h1 class="text-3xl font-extrabold text-center text-white">🎧 YouTube Premium Order</h1>
 
     <form id="orderForm" class="space-y-4">
       <input type="hidden" name="app" value="YouTube" />
       <input type="hidden" name="phone" value="9999999999" />
 
       <div>
-        <label class="block text-gray-700 font-medium">Your Email (Reseller):</label>
-        <input type="email" name="reseller" required class="w-full mt-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="reseller@example.com">
+        <label class="block text-gray-300 font-medium">Your Email (Reseller):</label>
+        <input type="email" name="reseller" required class="w-full mt-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400" placeholder="reseller@example.com">
       </div>
 
       <div>
-        <label class="block text-gray-700 font-medium">Customer Name:</label>
-        <input type="text" name="name" required class="w-full mt-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="Customer Name">
+        <label class="block text-gray-300 font-medium">Customer Name:</label>
+        <input type="text" name="name" required class="w-full mt-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400" placeholder="Customer Name">
       </div>
 
-      <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md font-semibold transition">Get Invite Link</button>
+      <button type="button" id="payNowBtn" class="w-full spotify-green text-black py-2 rounded-full font-semibold transition text-lg">Pay ₹15 & Get Invite</button>
     </form>
-
-    <div id="result" class="mt-4 hidden text-center">
-      <p class="font-medium text-gray-700">✅ Order placed successfully!</p>
-      <p class="mt-2"><strong>Invite Link:</strong></p>
-      <p id="inviteLink" class="text-blue-600 underline break-all"></p>
-    </div>
-
-    <div id="error" class="mt-4 text-center text-red-600 hidden">❌ No accounts available or something went wrong.</div>
   </div>
 
   <script>
-    const form = document.getElementById("orderForm");
-    const resultBox = document.getElementById("result");
-    const inviteLink = document.getElementById("inviteLink");
-    const errorBox = document.getElementById("error");
+    document.getElementById("payNowBtn").addEventListener("click", () => {
+      const reseller = document.querySelector('input[name="reseller"]').value.trim();
+      const name = document.querySelector('input[name="name"]').value.trim();
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      resultBox.classList.add("hidden");
-      errorBox.classList.add("hidden");
-
-      const formData = new FormData(form);
-
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbyNMquh_0CxmVhZE15AvlOXKslL-FFWLucbn7Rj5lzpxOZKbvWKRuT23oUlrFzBc9xcyA/exec", {
-          method: "POST",
-          body: formData
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          inviteLink.textContent = data.invite;
-          inviteLink.href = data.invite;
-          resultBox.classList.remove("hidden");
-        } else {
-          errorBox.classList.remove("hidden");
-        }
-      } catch (err) {
-        errorBox.classList.remove("hidden");
+      if (!reseller || !name) {
+        alert("Please fill all fields.");
+        return;
       }
+
+      // Save to localStorage
+      localStorage.setItem("app", "YouTube");
+      localStorage.setItem("phone", "9999999999");
+      localStorage.setItem("reseller", reseller);
+      localStorage.setItem("name", name);
+
+      // Redirect to your payment gateway
+      window.location.href = "https://payments.cashfree.com/forms/youtube23"; // Replace with actual payment link
     });
   </script>
 
 </body>
 </html>
+
