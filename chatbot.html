@@ -1,0 +1,149 @@
+<!-- chatbot.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlexDeal Chat Support</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .chat-bubble {
+      max-width: 80%;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+    .typing-indicator {
+      width: 60px;
+      height: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background-color: #a0aec0;
+      border-radius: 50%;
+      animation: blink 1.4s infinite both;
+    }
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0; }
+      40% { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col justify-between">
+
+  <header class="bg-white shadow p-4 text-center">
+    <h1 class="text-xl font-bold text-indigo-600">🤖 FlexDeal Chatbot Support</h1>
+    <p class="text-sm text-gray-500">Ask your questions below</p>
+  </header>
+
+  <main class="flex-1 overflow-auto p-4">
+    <div id="chat-box" class="space-y-2 max-w-xl mx-auto"></div>
+  </main>
+
+  <footer class="bg-white p-4 flex items-center gap-2 shadow-md sticky bottom-0">
+    <input id="chat-input" type="text" placeholder="Type your message..." class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm" />
+    <button onclick="sendMessage()" class="bg-indigo-600 text-white px-4 py-2 rounded text-sm">Send</button>
+  </footer>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+    const chatInput = document.getElementById("chat-input");
+    const chatMessages = [];
+    const resellerEmail = localStorage.getItem("reseller") || "unknown@flexdeal.com";
+
+    function addMessage(text, isUser) {
+      const bubble = document.createElement("div");
+      bubble.className = `chat-bubble ${isUser ? 'bg-indigo-100 self-end ml-auto' : 'bg-gray-200 self-start mr-auto'} text-sm`;
+      bubble.textContent = text;
+      chatBox.appendChild(bubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function showTyping() {
+      const typing = document.createElement("div");
+      typing.className = "typing-indicator";
+      typing.id = "typing-indicator";
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      chatBox.appendChild(typing);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function removeTyping() {
+      const typing = document.getElementById("typing-indicator");
+      if (typing) typing.remove();
+    }
+
+    function generateTicket() {
+      return "FD-" + Math.floor(Math.random() * 1000000);
+    }
+
+    function botReply(text) {
+      let reply = "🤖 I’m not sure about that. Please chat with our support team: https://wa.me/918764023747";
+      const t = text.toLowerCase();
+
+      if (t.includes("hi") || t.includes("hello")) reply = "Hi reseller 👋 How can I assist you today?";
+      else if (t.includes("how to order")) reply = "Go to Dashboard → Choose App → Pay & Get Access.";
+      else if (t.includes("payment fail")) reply = "Try again or contact us on WhatsApp.";
+      else if (t.includes("price")) reply = "YouTube ₹15 | Spotify ₹54 | Prime ₹153";
+      else if (t.includes("support")) reply = "Chat: https://wa.me/918764023747";
+      else if (t.includes("refund")) reply = `Please send payment screenshot to support. Ticket ID: ${generateTicket()}`;
+      else if (t.includes("delivery") || t.includes("delay")) reply = "Accounts are delivered instantly after payment.";
+      else if (t.includes("invite link")) reply = "Invite link is shown on the success page after payment.";
+      else if (t.includes("reseller id")) reply = "You're logged in as: " + resellerEmail;
+      else if (t.includes("note") || t.includes("remind")) {
+        localStorage.setItem("note", text);
+        reply = "✅ Reminder saved.";
+      }
+
+      setTimeout(() => {
+        removeTyping();
+        addMessage(reply, false);
+        chatMessages.push("Bot: " + reply);
+      }, 1000);
+    }
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      addMessage("You: " + text, true);
+      chatMessages.push("User: " + text);
+      chatInput.value = "";
+      showTyping();
+      setTimeout(() => botReply(text), 500);
+    }
+
+    function sendChatToSheet() {
+      if (!chatMessages.length) return;
+      fetch("https://script.google.com/macros/s/AKfycbxNNooo93qv1DWq-ew8zbcKc90pQ2g0-Oc22txht6GHgLbjmX6wYswJ88T3XmR5io5qHw/exec", {
+        method: "POST",
+        body: new URLSearchParams({
+          email: resellerEmail,
+          chat: chatMessages.join("\n")
+        })
+      });
+      chatMessages.length = 0;
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const greet = ["Welcome back", "Glad to see you again", "Hello again"][Math.floor(Math.random() * 3)];
+      addMessage(`${greet}, ${resellerEmail.split("@")[0]}!`, false);
+      const note = localStorage.getItem("note");
+      if (note) addMessage("📝 Reminder: " + note, false);
+    });
+
+    setInterval(sendChatToSheet, 20000);
+  </script>
+</body>
+</html>
